@@ -13,11 +13,13 @@ class SunkShipException : public std::exception {
 
 class Ship {
 	public:
-		Ship(int _spaces, std::string _name, int _chr) : spaces{_spaces}, name(_name), chr{_chr} { }
+		Ship(int _spaces, std::string _name, int _chr) : spaces{_spaces}, 
+				name(_name), chr{_chr} { }
 		int getChr() const { return chr; }
 		int getSpaces() const { return spaces; }
 		int getHits() const { return hits; }
-		void addHit() { hits++; if(hits == spaces){ throw SunkShipException("You sank a " + name + "!"); }}
+		void addHit() { hits++; if(hits == spaces){ 
+				throw SunkShipException("You sank a " + name + "!"); }}
 		std::string getName() const { return name; }
 	private:
 		int spaces;

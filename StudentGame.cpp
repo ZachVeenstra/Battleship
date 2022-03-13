@@ -9,18 +9,88 @@
  * Constructor will create the ships vector and add ships to it.
  */
 Game::Game(){
+	Ship* carrier = new Ship(5,"Carrier",'C');
+	Ship* battlesip = new Ship(4,"Battleship",'B');
+	Ship* destroyer = new Ship(3,"Destroyer",'D');
+	Ship* submarine = new Ship(3,"Submarine",'S');
+	Ship* patrolBoat = new Ship(2,"Patrol Boat",'P');
+	ships = {*carrier, *battlesip, *destroyer,
+			 *submarine, *patrolBoat};
 }
 
 /**
- * Begin Game let's user and then computer setup boards then calls run()
+* Greets the player and explains the pieces.
+*/
+void Game::hello(){
+
+	// displays the welcome message
+	std::cout << "|---------------BATTLESHIP---------------|\n\n"
+   		  "You will play versus Admiral Hopper, the greatest of\n"
+   		  "computer players! Place your ships, and good luck to you!\n" << std::endl;
+}
+
+
+/**
+ * Begin Game lets user and then computer setup boards then calls run()
  */
 void Game::beginGame(){
+	// greets the player
+	hello();
+
+	// player sets up board
+	placeShips();
+
+	// computer sets up board
+	placeShipsPC();
+
+	// runs the game
+	run();
 }
 
 /**
  * Handle the human placing ships.
  */
 void Game::placeShips(){
+	int x; // 
+	int y;
+	int intDirection;
+	Direction direction;
+	Board* b = new Board();
+	b->setVisible(true);
+
+
+	// prints the different pieces
+	std::cout << "The pieces are:\n\n"
+   		  "\t" << ships.at(0) << "\n" 
+   		  "\t" << ships.at(1) << "\n"
+		  "\t" << ships.at(2) << "\n"
+          "\t" << ships.at(3) << "\n"
+          "\t" << ships.at(4) << std::endl;
+
+	for (Ship s: ships) {
+		std::cout << "Where do you wish to place the " << s << "?" << std::endl;
+
+		std::cin >> x >> y; // accepts coordinates and sets x & y
+
+		std::cout << "Horizontally or Vertically? (0 or 1)" << std::endl;
+
+		std::cin >> intDirection;
+
+		std::cout << "Attempting to place the " << s.getName() << 
+					 " at " << x << ", " << y;
+		if(intDirection == 0) {
+			std::cout << " horizontally." << std::endl;
+			direction = HORIZONTAL;
+		}
+		else {
+			std::cout << " vertically." << std::endl;
+			direction = VERTICAL;
+		}
+
+		if (place(x,y,direction,s,*b)) {
+
+		}
+	}
 }
 
 /**
@@ -34,6 +104,7 @@ void Game::placeShipsPC(){
  * at a particular spot with a particular direction.
  */
 bool Game::place(const int& x, const int& y, Direction d, const Ship& s, Board& b){
+	return false;
 }
 
 /**
