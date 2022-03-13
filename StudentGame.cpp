@@ -24,7 +24,7 @@ Game::Game(){
 void Game::hello(){
 
 	// displays the welcome message
-	std::cout << "|---------------BATTLESHIP---------------|\n\n"
+	std::cout << "|--------------- BATTLESHIP ---------------|\n\n"
    		  "You will play versus Admiral Hopper, the greatest of\n"
    		  "computer players! Place your ships, and good luck to you!\n" << std::endl;
 }
@@ -67,8 +67,10 @@ void Game::placeShips(){
           "\t" << ships.at(3) << "\n"
           "\t" << ships.at(4) << std::endl;
 
-	for (Ship s: ships) {
-		std::cout << "Where do you wish to place the " << s << "?" << std::endl;
+	
+	for (int i = 0; i < 5; ++i) {
+		std::cout << "Where do you wish to place the " << ships.at(i) << 
+					 "?" << std::endl;
 
 		std::cin >> x >> y; // accepts coordinates and sets x & y
 
@@ -76,7 +78,7 @@ void Game::placeShips(){
 
 		std::cin >> intDirection;
 
-		std::cout << "Attempting to place the " << s.getName() << 
+		std::cout << "Attempting to place the " << ships.at(i).getName() << 
 					 " at " << x << ", " << y;
 		if(intDirection == 0) {
 			std::cout << " horizontally." << std::endl;
@@ -87,9 +89,12 @@ void Game::placeShips(){
 			direction = VERTICAL;
 		}
 
-		if (place(x,y,direction,s,*b)) {
-
+		if (!place(x,y,direction,ships.at(i),*b)) {
+			i = i - 1; // Causes the for-loop to enter the current iteration again.
 		}
+			
+		std::cout << *b << std::endl; // prints the board after placement
+		
 	}
 }
 
@@ -104,7 +109,47 @@ void Game::placeShipsPC(){
  * at a particular spot with a particular direction.
  */
 bool Game::place(const int& x, const int& y, Direction d, const Ship& s, Board& b){
-	return false;
+	Board& copy = b;
+
+
+	bool result = false;
+
+	try {
+		for (int i = 0; i < s.getSpaces(); ++i) {
+			if (d == HORIZONTAL) {
+				if (b[x][y + i] == EMPTY) {
+						copy[x][y + i] = s.getChr();
+						result = true;
+				}
+				else {
+					std::cout << "That intersects with another ship. Try again.\n";
+					result = false;
+					break;
+				}
+			}
+			else {
+				if (b[x + i][y] == EMPTY) {
+						copy[x + i][y] =s.getChr();
+						result = true;
+				}
+				else {
+					std::cout << "That intersects with another ship. Try again.\n";
+					result = false;
+					break;
+				}
+			}
+		}
+	}
+	catch (std::out_of_range) {
+		std::cout << "That is out of bounds of the board. Try again.\n";
+		return false;
+	}
+
+	if(result) {
+		b = copy;
+	}
+
+	return result;
 }
 
 /**
