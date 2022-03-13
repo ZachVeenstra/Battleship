@@ -109,7 +109,9 @@ void Game::placeShipsPC(){
  * at a particular spot with a particular direction.
  */
 bool Game::place(const int& x, const int& y, Direction d, const Ship& s, Board& b){
-	Board& copy = b;
+	Board* copycopy = new Board(b);
+	Board &copy = *copycopy;
+	// this is bad, but it works...
 
 
 	bool result = false;
@@ -118,24 +120,22 @@ bool Game::place(const int& x, const int& y, Direction d, const Ship& s, Board& 
 		for (int i = 0; i < s.getSpaces(); ++i) {
 			if (d == HORIZONTAL) {
 				if (b[x][y + i] == EMPTY) {
-						copy[x][y + i] = s.getChr();
-						result = true;
+					copy[x][y + i] = s.getChr();
+					result = true;
 				}
 				else {
 					std::cout << "That intersects with another ship. Try again.\n";
-					result = false;
-					break;
+					return false;
 				}
 			}
 			else {
 				if (b[x + i][y] == EMPTY) {
-						copy[x + i][y] =s.getChr();
-						result = true;
+					copy[x + i][y] = s.getChr();
+					result = true;
 				}
 				else {
 					std::cout << "That intersects with another ship. Try again.\n";
-					result = false;
-					break;
+					return false;
 				}
 			}
 		}

@@ -24,8 +24,11 @@ Board::Board(const Board& other){
 Board& Board::operator=(const Board& other){
     // std::swap(this->grid, other.grid);
     // std::swap(this->visible, other.visible);
+
     this->grid = other.grid;
     this->visible = other.visible; // BAD BAD BAD
+
+
     return *this;
 }
 
@@ -61,9 +64,12 @@ std::ostream& operator<<(std::ostream& os, Board const& b){
                      "        0        1        2        3        4        5        6        7        8        9  \n"
                      "--------------------------------------------------------------------------------------------\n";
         for (int i = 0; i < WIDTH; ++i) {
-            std::cout << i << " |";
+            std::cout << i << " |     ";
             for (int j = 0; j < HEIGHT; ++j) {
-                std::cout << "     " << char(b.grid[(i * WIDTH) + j]) << "   ";
+                std::cout << char(b.grid[(i * WIDTH) + j]) << "        ";
+                if (char(b.grid[(i * WIDTH) + j]) == EMPTY) {
+                    std::cout << " ";
+                }
             }
             std::cout << "\n";
         }
