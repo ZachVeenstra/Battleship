@@ -10,6 +10,8 @@ Board::Board(){
 }
 
 Board::Board(const Board& other){
+    // this->grid = new int[WIDTH * HEIGHT];
+    // *this->grid = *(other.grid);
     this->grid = other.grid;
     this->visible = other.visible;
 }
@@ -22,12 +24,20 @@ Board::Board(const Board& other){
  * @return Board& 
  */
 Board& Board::operator=(const Board& other){
-    // std::swap(this->grid, other.grid);
-    // std::swap(this->visible, other.visible);
 
-    this->grid = other.grid;
-    this->visible = other.visible; // BAD BAD BAD
+    Board* copy = new Board(other);
 
+    std::swap(this->visible, copy->visible);
+    std::swap(this->grid, copy->grid);
+
+
+    // this->grid = other.grid;
+    // this->visible = other.visible; // BAD BAD BAD
+
+    // Board* b = new Board();
+    // Board* c = new Board();
+    // std::swap(b->grid, c->grid);
+    // std::swap(b->visible, c->visible);
 
     return *this;
 }
@@ -76,13 +86,35 @@ std::ostream& operator<<(std::ostream& os, Board const& b){
 
     }
     else {
-
+        std::cout << " |-------------------- COMPUTER BOARD --------------------|\n"
+                     "        0        1        2        3        4        5        6        7        8        9  \n"
+                     "--------------------------------------------------------------------------------------------\n";
+        for (int i = 0; i < WIDTH; ++i) {
+            std::cout << i << " |     ";
+            for (int j = 0; j < HEIGHT; ++j) {
+                if (char(b.grid[(i * WIDTH) + j]) != HIT &&
+                    char(b.grid[(i * WIDTH) + j]) != MISS) { 
+                    std::cout << "         ";
+                }
+                if (char(b.grid[(i * WIDTH) + j]) == HIT ||
+                    char(b.grid[(i * WIDTH) + j]) == MISS) {
+                    std::cout << char(b.grid[(i * WIDTH) + j]) << "        ";
+                }
+            }
+            std::cout << "\n";
+        }
     }
     return os;
 }
 
 int Board::count() const{
-    return 0;
+    int count = 0;
+    for (int i = 0; i < WIDTH * HEIGHT; ++i) {
+        if (grid[i] == HIT) {
+            count++;
+        }
+    }
+    return count;
 }
 
 /**
